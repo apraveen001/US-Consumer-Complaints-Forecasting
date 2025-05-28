@@ -9,12 +9,18 @@ def train_arima(train_array):
     """
     Fit an auto-ARIMA on the training array and return the fitted model.
     """
+    # Automatically fits the best ARIMA model to the data
+    # `seasonal=True`: assumes the data has seasonality
+    # `m=12`: sets the seasonal period (e.g., 12 for monthly data with yearly seasonality)
+    # `stepwise=True`: uses a stepwise search to reduce computation time
+    # `suppress_warnings=True`: suppresses convergence and other warnings
+    
     model = auto_arima(
-        train_array,
-        seasonal=True,
-        m=12,
-        stepwise=True,
-        suppress_warnings=True
+        train_array,            # Input time series data (e.g., a 1D NumPy array or Pandas Series)
+        seasonal=True,          # Enables modeling of seasonal effects
+        m=12,                   # Seasonality period (e.g., 12 months)
+        stepwise=True,          # Uses a faster stepwise approach for model selection
+        suppress_warnings=True  # Suppresses warnings during model fitting
     )
     return model
 

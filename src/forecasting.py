@@ -4,6 +4,7 @@ import sys
 import numpy as np
 import pandas as pd
 
+from src.anomaly_detection import generate_alerts_report
 from src.data_ingestion      import load_complaints, train_test_split_ts
 from src.feature_engineering import create_time_features, series_to_supervised
 from src.model_training      import train_arima, train_prophet, train_lstm
@@ -67,6 +68,11 @@ def main(csv_path: str):
     print(results)
 
     return results
+
+
+# after you have your `series` (monthly counts) and forecasts:
+alerts = generate_alerts_report(series, window=12, z_thresh=3, model="rbf", pen=10)
+alerts.to_csv("reports/alerts_report.csv", index=False)
 
 
 if __name__ == "__main__":
