@@ -3,6 +3,7 @@
 import numpy as np
 import pandas as pd
 from sklearn.metrics import mean_absolute_error
+import matplotlib.pyplot as plt
 
 def mean_absolute_percentage_error(y_true: np.ndarray, y_pred: np.ndarray) -> float:
     """
@@ -35,3 +36,20 @@ def evaluate_forecasts(
         mape = mean_absolute_percentage_error(y_true, pred)
         records.append({'model': name, 'MAE': mae, 'MAPE': mape})
     return pd.DataFrame(records).set_index('model')
+
+
+def plot_with_alerts(series, alerts):
+    """
+    series : pd.Series indexed by date
+    alerts : DataFrame with columns ['date','alert_type']
+    """
+    fig, ax = plt.subplots(figsize=(10,4))
+    ax.plot(series.index, series.values, label='Monthly count')
+    for _, row in alerts.iterrows():
+        ax.axvline(row['date'], linestyle='--', 
+                   label=row['alert_type'], alpha=0.7)
+    ax.set_title('Time Series with Detected Change-Points / Spikes')
+    ax.set_ylabel('Complaint volume')
+    ax.legend()
+    plt.tight_layout()
+    plt.show()
